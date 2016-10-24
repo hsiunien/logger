@@ -1,0 +1,1 @@
+adb pull /mnt/sdcard/android/data/com.iboxpay.wallet/cache/ . 
