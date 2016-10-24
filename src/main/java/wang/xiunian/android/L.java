@@ -134,16 +134,16 @@ public class L {
         /**
          * 对于一些繁琐的日志显示
          *
-         * @param tag
-         * @param message
+         * @param tag tag
+         * @param message msg
          */
         void v(String tag, Object... message);
 
         /**
          * 用于调试的日志,此类日志不会记录到文件
          *
-         * @param tag
-         * @param message
+         * @param tag tag
+         * @param message msg
          */
         void d(String tag, Object... message);
 

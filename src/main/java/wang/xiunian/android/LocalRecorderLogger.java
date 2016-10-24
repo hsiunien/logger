@@ -167,6 +167,7 @@ public class LocalRecorderLogger implements L.ILog, Runnable {
 
     /**
      * 收集设备参数信息
+     * @param ctx     context
      */
     public void collectDeviceInfo(Context ctx) {
         if (mDeviceAttrMap == null) {
@@ -238,9 +239,9 @@ public class LocalRecorderLogger implements L.ILog, Runnable {
         private static LocalRecorderLogger sLogger;
 
         /**
-         * @param context
+         * @param context context
          * @param deviceId 设备的唯一编号 和用于区分设备的唯一标识的字段一致
-         * @return
+         * @return logger
          */
         public LocalRecorderLogger build(Context context, String deviceId) {
             uniqueDeviceId = deviceId;

@@ -11,7 +11,7 @@ android {
 }
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.google.code.gson:gson:2.4'
+    compile('com.google.code.gson:gson:2.4')
     // Required for local unit tests (JUnit 4 framework)
     testCompile 'junit:junit:4.12'
 
@@ -19,6 +19,6 @@ dependencies {
     androidTestCompile 'com.android.support:support-annotations:24.2.1'
     androidTestCompile 'com.android.support.test:runner:0.5'
 }
-
+apply from: "../maven_push.gradle"
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
