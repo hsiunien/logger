@@ -111,7 +111,6 @@ public class LoggerReader {
         }
         cipherInputStream.close();
         fos.close();
-
     }
 
 }
