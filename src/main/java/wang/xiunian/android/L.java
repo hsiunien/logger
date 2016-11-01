@@ -11,13 +11,22 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class L {
 
-    private static String TAG_PREFIX = "wallet_";
+    private static String TAG_PREFIX = "ghost_";
     private static LogLevel sLogLevel = LogLevel.WARN;
     private final static List<ILog> sLoggerList = new CopyOnWriteArrayList<ILog>() {
         {
             add(new DefaultLogger());
         }
     };
+
+    /**
+     * @param defaultTag 默认的tag
+     * @param level      日志输出等级 查看{@link LogLevel}中的枚举类型
+     */
+    public static void init(String defaultTag, LogLevel level) {
+        TAG_PREFIX = defaultTag;
+        sLogLevel = level;
+    }
 
     public static boolean shouldLog() {
         return sLogLevel.level <= LogLevel.DEBUG.level;
@@ -129,12 +138,16 @@ public class L {
     }
 
 
+    /**
+     * 自定义log类需要添加到L的输出的话需要实现ILog
+     *
+     */
     public interface ILog {
 
         /**
          * 对于一些繁琐的日志显示
          *
-         * @param tag tag
+         * @param tag     tag
          * @param message msg
          */
         void v(String tag, Object... message);
@@ -142,7 +155,7 @@ public class L {
         /**
          * 用于调试的日志,此类日志不会记录到文件
          *
-         * @param tag tag
+         * @param tag     tag
          * @param message msg
          */
         void d(String tag, Object... message);
