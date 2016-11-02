@@ -100,6 +100,9 @@ public class LocalRecorderLogger implements L.ILog, Runnable {
         write(tag + "/E", message);
     }
 
+    /**
+     * 上传日志
+     */
     public void upload() {
         checkShouldUploade();
     }
@@ -261,7 +264,7 @@ public class LocalRecorderLogger implements L.ILog, Runnable {
         }
 
         public Builder setUploadUrl(String url) {
-            this.checkUrl = url;
+            this.uploadUrl = url;
             return this;
         }
 
