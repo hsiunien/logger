@@ -52,7 +52,6 @@ public class LoggerReader {
     @Test
     public void testRecordBuff() throws DataFormatException {
         InputStream is = getClass().getResourceAsStream("/a.txt");
-        // Compress the bytes
         String origin = "1234567890";
         CacheData cd = new CacheData(19);
         for (int i = 0; i < 100; i++) {
