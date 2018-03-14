@@ -42,9 +42,10 @@ public class LocalRecorderLogger implements L.ILog, Runnable {
     private HashMap<String, String> mDeviceAttrMap;
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.CHINA);
     private static final DateFormat DATE_FORMAT_FILE_NAME = new SimpleDateFormat("yy_MM_ddHH_mm_ss_SSS", Locale.CHINA);
+    private Thread mRecordThread;
 
     private LocalRecorderLogger(Context context, Builder builder) {
-        mCachedFolder = context.getCacheDir();
+        mCachedFolder = builder.mCacheFolder == null ? context.getCacheDir() : builder.mCacheFolder;
         mDeviceId = builder.uniqueDeviceId;
         this.mBuilder = builder;
         try {
@@ -53,7 +54,8 @@ public class LocalRecorderLogger implements L.ILog, Runnable {
             mFileOutputStream = new FileOutputStream(mOutputFile);
             mCachedQueue = new LinkedBlockingDeque<>();
             collectDeviceInfo(context);
-            new Thread(this).start();
+            mRecordThread = new Thread(this);
+            mRecordThread.start();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -61,7 +63,7 @@ public class LocalRecorderLogger implements L.ILog, Runnable {
 
     @Override
     public void v(String tag, Object... message) {
-       //write(tag, message);
+        //write(tag, message);
     }
 
     @Override
@@ -107,6 +109,10 @@ public class LocalRecorderLogger implements L.ILog, Runnable {
         checkShouldUploade();
     }
 
+    public void stopRecord() {
+        mRecordThread.interrupt();
+    }
+
     private void checkShouldUploade() {
         new Thread(new Runnable() {
             @Override
@@ -132,7 +138,7 @@ public class LocalRecorderLogger implements L.ILog, Runnable {
     private void write(String tag, Object... messages) {
         try {
             for (Object message : messages) {
-                String outMessage = DATE_FORMAT.format(new Date()) + " " + tag + ":" + message.toString()+"\r\n";
+                String outMessage = DATE_FORMAT.format(new Date()) + " " + tag + ":" + message.toString() + "\r\n";
                 mCachedQueue.put(outMessage);
             }
         } catch (InterruptedException e) {
@@ -144,7 +150,7 @@ public class LocalRecorderLogger implements L.ILog, Runnable {
     public void run() {
         LogOutputStream bos = null;
         try {
-            bos = new LogOutputStream(mFileOutputStream);
+            bos = new LogOutputStream(mFileOutputStream, mBuilder.mMaxLength);
             while (!Thread.interrupted()) {
                 String msg = mCachedQueue.take();
                 bos.write(msg.getBytes());
@@ -170,7 +176,8 @@ public class LocalRecorderLogger implements L.ILog, Runnable {
 
     /**
      * 收集设备参数信息
-     * @param ctx     context
+     *
+     * @param ctx context
      */
     public void collectDeviceInfo(Context ctx) {
         if (mDeviceAttrMap == null) {
@@ -235,14 +242,16 @@ public class LocalRecorderLogger implements L.ILog, Runnable {
     }
 
     public static class Builder {
-        //// TODO: 2016/10/17  setrelease url
         private String checkUrl = "http://172.30.61.41:9001/check.json";
         private String uploadUrl = "http://172.30.61.41:9001/image.json";
         private String uniqueDeviceId;
+        private int mMaxLength = -1;
+        private File mCacheFolder;
         private static LocalRecorderLogger sLogger;
 
+
         /**
-         * @param context context
+         * @param context  context
          * @param deviceId 设备的唯一编号 和用于区分设备的唯一标识的字段一致
          * @return logger
          */
@@ -266,6 +275,14 @@ public class LocalRecorderLogger implements L.ILog, Runnable {
         public Builder setUploadUrl(String url) {
             this.uploadUrl = url;
             return this;
+        }
+
+        public void setMaxLength(int maxLength) {
+            mMaxLength = maxLength;
+        }
+
+        public void setCacheFolder(File cacheFolder) {
+            mCacheFolder = cacheFolder;
         }
 
     }

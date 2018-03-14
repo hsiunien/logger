@@ -11,19 +11,20 @@ import java.util.zip.GZIPOutputStream;
  */
 
 public class LogOutputStream extends FilterOutputStream implements CacheData.ReceiveCached {
-    private static final int sMaxLength = 512;
+    private static final int MAX_LENGTH = 512;
     private CacheData mCacheData;
 
-    GZIPOutputStream gzipOutputStream = null;
+    private GZIPOutputStream gzipOutputStream = null;
 
-    public LogOutputStream(OutputStream out) {
+    LogOutputStream(OutputStream out, int maxLength) {
         super(new BufferedOutputStream(out));
-        mCacheData = new CacheData(sMaxLength);
+        mCacheData = new CacheData(maxLength == -1 ? MAX_LENGTH : maxLength);
         try {
             gzipOutputStream = new GZIPOutputStream(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -34,11 +35,12 @@ public class LogOutputStream extends FilterOutputStream implements CacheData.Rec
 
     @Override
     public void receive(byte[] cached) {
-        System.out.print("out:" + cached.length);
         try {
             gzipOutputStream.write(cached);
             gzipOutputStream.flush();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
