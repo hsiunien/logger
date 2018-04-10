@@ -11,7 +11,7 @@ android {
 }
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile('com.google.code.gson:gson:2.4')
+    api('com.google.code.gson:gson:2.4')
     // Required for local unit tests (JUnit 4 framework)
     testCompile 'junit:junit:4.12'
 }
