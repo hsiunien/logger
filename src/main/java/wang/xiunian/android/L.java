@@ -140,7 +140,6 @@ public class L {
 
     /**
      * 自定义log类需要添加到L的输出的话需要实现ILog
-     *
      */
     public interface ILog {
 
@@ -255,7 +254,13 @@ public class L {
             String className = targetElement.getClassName();
             String[] classNameInfo = className.split("\\.");
             if (classNameInfo.length > 0) {
-                className = classNameInfo[classNameInfo.length - 1] + ".java";
+                String fullClassName = classNameInfo[classNameInfo.length - 1];
+                String[] innerClassInfo = fullClassName.split("\\$");
+                if (innerClassInfo.length > 0) {
+                    className = innerClassInfo[0]+ ".java";
+                } else {
+                    className = classNameInfo[classNameInfo.length - 1] + ".java";
+                }
             }
             String methodName = targetElement.getMethodName();
             int lineNumber = targetElement.getLineNumber();
