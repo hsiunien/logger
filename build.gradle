@@ -2,16 +2,20 @@ apply plugin: 'com.android.library'
 android {
 
     compileSdkVersion 25
-    buildToolsVersion "27.0.3"
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 25
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
+    namespace 'wang.xiunian.android'
 }
 dependencies {
-//    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(dir: 'libs', include: ['*.jar'])
     api('com.google.code.gson:gson:2.4')
     // Required for local unit tests (JUnit 4 framework)
     testImplementation 'junit:junit:4.12'
+
+    // Required for instrumented tests
+    androidTestImplementation 'androidx.annotation:annotation:1.0.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 }
