@@ -9,15 +9,18 @@ feature
 
 1. 显示设置输出级别.
 
-```
-     L.setLogLevel(LogLevel.DEBUG);
-```
+    ```
+         L.setLogLevel(LogLevel.DEBUG);
+    ```
 
 1. 输出当前堆栈信息
 
-```
-    L.printStackTrace()
-```
+    ```
+        L.printStackTrace()
+    ```
 
+3. 日志保存到文件
 
-​    
+4. 日志上传
+
+   
