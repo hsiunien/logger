@@ -19,8 +19,7 @@ import java.net.URLConnection;
 /**
  * * This utility class provides an abstraction layer for sending multipart HTTP
  * * POST requests to a web server.
- * * @author www.codejava.net
- * *
+A * *
  */
 public class MultipartUtility {
     private final String boundary;
